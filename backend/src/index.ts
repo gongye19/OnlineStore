@@ -80,9 +80,11 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 });
 
 // 启动服务器
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+// Railway 需要监听 0.0.0.0 而不是 localhost
+const HOST = process.env.HOST || '0.0.0.0';
+app.listen(PORT, HOST, () => {
+  console.log(`🚀 Server running on ${HOST}:${PORT}`);
   console.log(`📡 CORS enabled for: ${expandedOrigins.join(', ')}`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+  console.log(`🔗 Health check: http://${HOST}:${PORT}/health`);
 });
 
