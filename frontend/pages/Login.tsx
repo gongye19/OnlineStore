@@ -318,7 +318,8 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
           </div>
         </form>
       )}
-    </div>
+      </div>
+    </>
   );
 };
 
