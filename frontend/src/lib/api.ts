@@ -89,7 +89,7 @@ export const authApi = {
 
 // 商品 API
 export const productsApi = {
-  getAll: async (category?: string, featured?: boolean, page = 1, limit = 10) => {
+  getAll: async (category?: string, featured?: boolean, page = 1, limit = 100) => {
     const params = new URLSearchParams({
       page: page.toString(),
       limit: limit.toString(),
@@ -97,7 +97,7 @@ export const productsApi = {
     if (category && category !== 'All') params.append('category', category);
     if (featured) params.append('featured', 'true');
     
-    return apiRequest<{ products: Product[]; pagination: any }>(`/api/products?${params}`);
+    return apiRequest<{ products: any[]; pagination: any }>(`/api/products?${params}`);
   },
 
   getById: async (id: string) => {

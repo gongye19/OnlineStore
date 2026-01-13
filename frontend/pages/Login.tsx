@@ -1,6 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { Page, UserProfile } from '../types';
+import { authApi } from '../src/lib/api';
 
 interface LoginProps {
   onLogin: (success: boolean, asAdmin: boolean, profile?: UserProfile) => void;
@@ -47,24 +48,36 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
     return CHINA_REGIONS[regData.province] || [];
   }, [regData.province]);
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginPhone || !loginPassword) {
       alert('请输入注册时填写的手机号与密码。');
       return;
     }
-    // 管理员验证逻辑 (演示用)
-    const isAdmin = loginPhone === '13800138000' && loginPassword === 'admin123';
     
-    onLogin(true, isAdmin);
-    if (isAdmin) {
-      alert('管理员身份认证成功，欢迎进入管理后台。');
-    } else {
-      alert('登录成功，欢迎回到 Artisan 工作室。');
+    try {
+      const response = await authApi.login(loginPhone, loginPassword);
+      const user = response.user;
+      const profile: UserProfile = {
+        phone: user.phone,
+        nickname: user.nickname,
+        email: user.email || '',
+        address: user.address || '',
+        gender: user.gender as 'male' | 'female' | 'other'
+      };
+      
+      onLogin(true, user.is_admin || false, profile);
+      if (user.is_admin) {
+        alert('管理员身份认证成功，欢迎进入管理后台。');
+      } else {
+        alert('登录成功，欢迎回到 Artisan 工作室。');
+      }
+    } catch (error: any) {
+      alert(error.message || '登录失败，请检查手机号和密码。');
     }
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (regData.password !== regData.confirmPassword) {
       alert('两次输入的密码不一致，请核对。');
@@ -75,16 +88,32 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
       return;
     }
 
-    const profile: UserProfile = {
-      phone: regData.phone,
-      nickname: regData.nickname,
-      email: regData.email,
-      address: `${regData.province}${regData.city}${regData.detailAddress}`,
-      gender: regData.gender
-    };
+    try {
+      await authApi.register({
+        phone: regData.phone,
+        password: regData.password,
+        nickname: regData.nickname,
+        email: regData.email,
+        address: `${regData.province}${regData.city}${regData.detailAddress}`,
+        gender: regData.gender
+      });
 
-    alert('注册成功！正在为您自动进入 Artisan 工作室...');
-    onLogin(true, false, profile);
+      // 注册成功后自动登录
+      const response = await authApi.login(regData.phone, regData.password);
+      const user = response.user;
+      const profile: UserProfile = {
+        phone: user.phone,
+        nickname: user.nickname,
+        email: user.email || '',
+        address: user.address || '',
+        gender: user.gender as 'male' | 'female' | 'other'
+      };
+
+      alert('注册成功！正在为您自动进入 Artisan 工作室...');
+      onLogin(true, false, profile);
+    } catch (error: any) {
+      alert(error.message || '注册失败，请检查输入信息。');
+    }
   };
 
   return (

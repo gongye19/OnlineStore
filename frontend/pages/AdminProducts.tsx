@@ -1,6 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Product, Category } from '../types';
+import { productsApi, uploadApi } from '../src/lib/api';
 
 interface AdminProductsProps {
   products: Product[];
@@ -22,20 +23,16 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products, onAddProduct, o
     stock: 10
   });
 
-  const handleFiles = (files: FileList | null) => {
+  const handleFiles = async (files: FileList | null) => {
     if (!files) return;
     
-    const promises = Array.from(files).map(file => {
-      return new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.readAsDataURL(file);
-      });
-    });
-
-    Promise.all(promises).then(base64Images => {
-      setUploadedImages(prev => [...prev, ...base64Images]);
-    });
+    try {
+      const fileArray = Array.from(files);
+      const result = await uploadApi.uploadMultiple(fileArray);
+      setUploadedImages(prev => [...prev, ...result.urls]);
+    } catch (error: any) {
+      alert(error.message || '图片上传失败');
+    }
   };
 
   const onDragOver = (e: React.DragEvent) => {
@@ -57,32 +54,36 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products, onAddProduct, o
     setUploadedImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (uploadedImages.length === 0) {
       alert('请至少上传一张商品图片');
       return;
     }
 
-    const product: Product = {
-      id: `P-${Date.now()}`,
-      name: newProduct.name || '未命名作品',
-      price: Number(newProduct.price) || 0,
-      category: (newProduct.category as Category) || 'Necklaces',
-      description: newProduct.description || '',
-      image: uploadedImages[0], // First image is main
-      images: uploadedImages,    // Store all images
-      stock: Number(newProduct.stock) || 0,
-      featured: false
-    };
+    try {
+      await productsApi.create({
+        name: newProduct.name || '未命名作品',
+        price: Number(newProduct.price) || 0,
+        category: (newProduct.category as Category) || 'Necklaces',
+        description: newProduct.description || '',
+        image_url: uploadedImages[0],
+        images: uploadedImages,
+        stock: Number(newProduct.stock) || 0,
+        featured: false
+      });
 
-    onAddProduct(product);
-    setIsAdding(false);
-    setUploadedImages([]);
-    setNewProduct({
+      onAddProduct({} as Product); // 触发刷新
+      setIsAdding(false);
+      setUploadedImages([]);
+      setNewProduct({
         name: '', price: 0, category: 'Necklaces', description: '',
         stock: 10
-    });
+      });
+      alert('商品创建成功！');
+    } catch (error: any) {
+      alert(error.message || '创建商品失败');
+    }
   };
 
   return (
@@ -272,7 +273,17 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products, onAddProduct, o
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button 
-                      onClick={() => onDeleteProduct(p.id)}
+                      onClick={async () => {
+                        if (confirm('确定要删除这个商品吗？')) {
+                          try {
+                            await productsApi.delete(p.id);
+                            onDeleteProduct(p.id);
+                            alert('商品已删除');
+                          } catch (error: any) {
+                            alert(error.message || '删除失败');
+                          }
+                        }
+                      }}
                       className="text-gray-300 hover:text-red-500 transition-colors p-2"
                     >
                       <span className="material-symbols-outlined">delete</span>
