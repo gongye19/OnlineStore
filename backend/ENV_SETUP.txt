@@ -5,5 +5,8 @@
 SUPABASE_URL=https://cjbfjtbkxqwvmwxpzipd.supabase.co
 SUPABASE_SERVICE_KEY=你的service-role-key
 PORT=3001
-CORS_ORIGIN=https://你的前端域名.vercel.app
+CORS_ORIGIN=https://online-store-phi-smoky.vercel.app,http://localhost:3000
+
+# 注意：CORS_ORIGIN 可以设置多个域名，用逗号分隔
+# 例如：CORS_ORIGIN=https://domain1.com,https://domain2.com,http://localhost:3000
 
