@@ -35,7 +35,16 @@ router.post('/register', async (req: Request, res: Response) => {
     const { data: authData, error: authError } = await supabase.auth.signUp(signUpData);
 
     if (authError) {
-      return res.status(400).json({ error: authError.message });
+      console.error('Supabase signUp error:', authError);
+      // 提供更详细的错误信息
+      let errorMessage = authError.message;
+      if (authError.message.includes('phone')) {
+        errorMessage = '手机号注册失败，请检查手机号格式或联系管理员';
+      }
+      return res.status(400).json({ 
+        error: errorMessage,
+        details: authError.message 
+      });
     }
 
     if (!authData.user) {
