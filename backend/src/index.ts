@@ -6,6 +6,7 @@ import productsRoutes from './routes/products.js';
 import cartRoutes from './routes/cart.js';
 import ordersRoutes from './routes/orders.js';
 import uploadRoutes from './routes/upload.js';
+import uploadHomeImagesRoutes from './routes/upload-home-images.js';
 
 dotenv.config();
 
@@ -78,6 +79,7 @@ app.use('/api/products', productsRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/upload', uploadHomeImagesRoutes);
 
 // 404 处理
 app.use((req, res) => {
