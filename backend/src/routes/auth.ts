@@ -129,7 +129,21 @@ router.post('/register', async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error('Register error:', error);
-    res.status(500).json({ error: error.message || 'Registration failed' });
+    // 如果错误已经被处理过，直接返回
+    if (error.statusCode) {
+      return res.status(error.statusCode).json({ error: error.message });
+    }
+    // 检查是否是 Supabase 错误
+    if (error.code === 'email_provider_disabled') {
+      return res.status(400).json({ 
+        error: '邮箱注册功能未启用。请在 Supabase Dashboard → Authentication → Providers → Email 中启用邮箱注册功能',
+        code: error.code 
+      });
+    }
+    res.status(500).json({ 
+      error: error.message || 'Registration failed',
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
