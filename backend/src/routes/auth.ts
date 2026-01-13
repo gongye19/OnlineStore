@@ -50,13 +50,18 @@ router.post('/register', async (req: Request, res: Response) => {
       console.error('Supabase signUp error:', authError);
       // 提供更详细的错误信息
       let errorMessage = authError.message;
-      if (authError.message.includes('email')) {
+      if (authError.code === 'email_provider_disabled') {
+        errorMessage = '邮箱注册功能未启用，请在 Supabase Dashboard 中启用 Email 认证提供者';
+      } else if (authError.code === 'phone_provider_disabled') {
+        errorMessage = '手机号注册功能未启用';
+      } else if (authError.message.includes('email') || authError.message.includes('Email')) {
         errorMessage = '邮箱已被注册或格式不正确';
       } else if (authError.message.includes('password')) {
         errorMessage = '密码不符合要求（至少6位）';
       }
       return res.status(400).json({ 
         error: errorMessage,
+        code: authError.code,
         details: authError.message 
       });
     }
