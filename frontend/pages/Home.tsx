@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { homeImages } from '../config/homeImages';
 
 interface HomeProps {
@@ -7,6 +7,10 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ onShopNow }) => {
+  const [heroLoaded, setHeroLoaded] = useState(false);
+  const [philosophyLoaded, setPhilosophyLoaded] = useState(false);
+  const [founderLoaded, setFounderLoaded] = useState(false);
+
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
@@ -15,7 +19,10 @@ const Home: React.FC<HomeProps> = ({ onShopNow }) => {
           <img 
             src={homeImages.hero} 
             alt="Artisan Jewelry Background" 
-            className="w-full h-full object-cover scale-105 brightness-[0.65]"
+            className={`w-full h-full object-cover scale-105 brightness-[0.65] transition-all duration-[2000ms] ease-out ${
+              heroLoaded ? 'grayscale-0' : 'grayscale'
+            }`}
+            onLoad={() => setHeroLoaded(true)}
             onError={(e) => {
               // 如果图片加载失败，尝试其他格式
               const img = e.target as HTMLImageElement;
@@ -77,8 +84,11 @@ const Home: React.FC<HomeProps> = ({ onShopNow }) => {
                 <img 
                   src={homeImages.philosophy} 
                   alt="Jeweler at work" 
-                  className="w-full h-full object-cover animate-fade-in duration-1000"
+                  className={`w-full h-full object-cover transition-all duration-[2000ms] ease-out ${
+                    philosophyLoaded ? 'grayscale-0 opacity-100' : 'grayscale opacity-0'
+                  }`}
                   loading="lazy"
+                  onLoad={() => setPhilosophyLoaded(true)}
                   onError={(e) => {
                     // 如果图片加载失败，尝试其他格式
                     const img = e.target as HTMLImageElement;
@@ -111,7 +121,10 @@ const Home: React.FC<HomeProps> = ({ onShopNow }) => {
                 <img 
                   src={homeImages.founder} 
                   alt="Founder Ms. Yao" 
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full object-cover transition-all duration-[2000ms] ease-out ${
+                    founderLoaded ? 'grayscale-0 opacity-100' : 'grayscale opacity-0'
+                  }`}
+                  onLoad={() => setFounderLoaded(true)}
                   onError={(e) => {
                     // 如果图片加载失败，尝试其他格式
                     const img = e.target as HTMLImageElement;
