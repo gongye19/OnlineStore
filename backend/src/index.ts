@@ -17,20 +17,34 @@ const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
   : ['http://localhost:3000'];
 
+// 规范化 origin（处理 http/https 协议）
+const normalizeOrigin = (origin: string): string[] => {
+  if (origin.startsWith('http://')) {
+    return [origin, origin.replace('http://', 'https://')];
+  } else if (origin.startsWith('https://')) {
+    return [origin, origin.replace('https://', 'http://')];
+  }
+  return [origin];
+};
+
+// 展开所有可能的 origin 变体（http 和 https）
+const expandedOrigins = allowedOrigins.flatMap(normalizeOrigin);
+
 // 中间件
 app.use(cors({
   origin: (origin, callback) => {
     // 允许没有 origin 的请求（如移动应用或 Postman）
     if (!origin) return callback(null, true);
     
-    // 检查是否在允许列表中
-    if (allowedOrigins.includes(origin)) {
+    // 检查是否在允许列表中（包括 http/https 变体）
+    if (expandedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       // 开发环境允许所有来源（仅用于调试）
       if (process.env.NODE_ENV !== 'production') {
         callback(null, true);
       } else {
+        console.warn(`CORS blocked origin: ${origin}. Allowed: ${expandedOrigins.join(', ')}`);
         callback(new Error('Not allowed by CORS'));
       }
     }
@@ -68,7 +82,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 // 启动服务器
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📡 CORS enabled for: ${CORS_ORIGIN}`);
+  console.log(`📡 CORS enabled for: ${expandedOrigins.join(', ')}`);
   console.log(`🔗 Health check: http://localhost:${PORT}/health`);
 });
 
