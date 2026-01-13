@@ -90,9 +90,27 @@ router.post('/login', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Phone and password are required' });
     }
 
-    // 使用 Supabase Auth 登录
+    // 由于 Supabase Auth 使用邮箱，需要通过手机号查找对应的邮箱
+    // 如果 phone 是邮箱格式，直接使用；否则从 users 表查找
+    let loginEmail = phone;
+    
+    // 如果输入的不是邮箱格式（不包含 @），则从 users 表查找对应的邮箱
+    if (!phone.includes('@')) {
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('email')
+        .eq('phone', phone)
+        .single();
+      
+      if (userError || !userData?.email) {
+        return res.status(401).json({ error: '手机号或密码错误' });
+      }
+      loginEmail = userData.email;
+    }
+
+    // 使用邮箱登录 Supabase Auth
     const { data, error } = await supabase.auth.signInWithPassword({
-      phone,
+      email: loginEmail,
       password
     });
 
