@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { homeImages } from '../config/homeImages';
 
 interface HomeProps {
   onShopNow: () => void;
@@ -12,9 +13,13 @@ const Home: React.FC<HomeProps> = ({ onShopNow }) => {
       <section className="relative h-[80vh] w-full overflow-hidden flex items-center justify-center">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&q=80&w=2000" 
+            src={homeImages.hero} 
             alt="Artisan Jewelry Background" 
             className="w-full h-full object-cover scale-105 brightness-[0.65]"
+            onError={(e) => {
+              // 如果图片加载失败，显示占位色
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40"></div>
         </div>
@@ -66,10 +71,19 @@ const Home: React.FC<HomeProps> = ({ onShopNow }) => {
             <div className="md:col-span-5">
               <div className="relative aspect-[4/5] overflow-hidden rounded-sm shadow-2xl border border-art-charcoal/5 bg-art-sand">
                 <img 
-                  src="https://images.unsplash.com/photo-1513519245088-0e12902e35ca?auto=format&fit=crop&q=80&w=1200" 
+                  src={homeImages.philosophy} 
                   alt="Jeweler at work" 
                   className="w-full h-full object-cover animate-fade-in duration-1000"
                   loading="lazy"
+                  onError={(e) => {
+                    // 如果图片加载失败，显示错误提示
+                    const img = e.target as HTMLImageElement;
+                    img.style.display = 'none';
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'w-full h-full flex items-center justify-center text-art-charcoal/40 text-sm';
+                    errorDiv.textContent = '图片加载失败';
+                    img.parentElement?.appendChild(errorDiv);
+                  }}
                 />
               </div>
             </div>
@@ -84,9 +98,18 @@ const Home: React.FC<HomeProps> = ({ onShopNow }) => {
             <div className="w-40 md:w-56 flex-shrink-0">
               <div className="aspect-[3/4] overflow-hidden border border-art-charcoal/10 rounded-sm shadow-lg">
                 <img 
-                  src="https://images.unsplash.com/photo-1581404917879-53e19259fdda?auto=format&fit=crop&q=80&w=800" 
+                  src={homeImages.founder} 
                   alt="Founder Ms. Yao" 
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // 如果图片加载失败，显示占位色
+                    const img = e.target as HTMLImageElement;
+                    img.style.display = 'none';
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'w-full h-full bg-art-sand flex items-center justify-center text-art-charcoal/40 text-xs';
+                    errorDiv.textContent = '图片加载失败';
+                    img.parentElement?.appendChild(errorDiv);
+                  }}
                 />
               </div>
             </div>
