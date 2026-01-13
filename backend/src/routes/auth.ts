@@ -10,7 +10,24 @@ router.post('/register', async (req: Request, res: Response) => {
 
     // 验证必填字段：邮箱是必填的（用于 Supabase Auth），手机号和昵称也是必填的
     if (!email || !password || !nickname || !phone) {
-      return res.status(400).json({ error: 'Email, password, nickname, and phone are required' });
+      return res.status(400).json({ error: '邮箱、密码、昵称和手机号都是必填项' });
+    }
+
+    // 验证邮箱格式
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: '邮箱格式不正确，请输入有效的邮箱地址' });
+    }
+
+    // 验证手机号格式（11位数字）
+    const phoneRegex = /^1[3-9]\d{9}$/;
+    if (!phoneRegex.test(phone)) {
+      return res.status(400).json({ error: '手机号格式不正确，请输入11位有效手机号' });
+    }
+
+    // 验证密码长度
+    if (password.length < 6) {
+      return res.status(400).json({ error: '密码长度至少为6位' });
     }
 
     // 使用邮箱注册（Supabase Auth 使用邮箱作为主标识符）
