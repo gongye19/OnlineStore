@@ -10,7 +10,8 @@ import uploadRoutes from './routes/upload.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+// Railway 会自动设置 PORT 环境变量，如果没有则使用默认值
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 
 // CORS 配置 - 支持多个域名
 const allowedOrigins = process.env.CORS_ORIGIN 

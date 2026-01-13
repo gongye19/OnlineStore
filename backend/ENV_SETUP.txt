@@ -4,9 +4,11 @@
 
 SUPABASE_URL=https://cjbfjtbkxqwvmwxpzipd.supabase.co
 SUPABASE_SERVICE_KEY=你的service-role-key
-PORT=3001
 CORS_ORIGIN=https://online-store-phi-smoky.vercel.app,http://localhost:3000
 
-# 注意：CORS_ORIGIN 可以设置多个域名，用逗号分隔
-# 例如：CORS_ORIGIN=https://domain1.com,https://domain2.com,http://localhost:3000
+# 重要说明：
+# 1. PORT 环境变量由 Railway 自动设置，不需要手动添加
+# 2. 确保 Railway 的 Target port 配置与 PORT 环境变量一致（通常是 3001）
+# 3. CORS_ORIGIN 可以设置多个域名，用逗号分隔，不要有空格
+# 4. 确保 CORS_ORIGIN 中的域名完整正确（注意是 .app 不是 .ap）
 
