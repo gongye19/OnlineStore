@@ -105,11 +105,11 @@ ORDER BY u.created_at DESC, c.created_at DESC NULLS LAST;
 -- ============================================
 SELECT 
     COUNT(*) as 总用户数,
-    COUNT(*) FILTER (WHERE is_admin = true) as 管理员数量,
-    COUNT(*) FILTER (WHERE is_admin = false) as 普通用户数量,
-    COUNT(*) FILTER (WHERE email IS NOT NULL) as 有邮箱用户数,
-    COUNT(*) FILTER (WHERE created_at >= CURRENT_DATE - INTERVAL '7 days') as 近7天新用户,
-    COUNT(*) FILTER (WHERE created_at >= CURRENT_DATE - INTERVAL '30 days') as 近30天新用户,
+    COUNT(*) FILTER (WHERE u.is_admin = true) as 管理员数量,
+    COUNT(*) FILTER (WHERE u.is_admin = false) as 普通用户数量,
+    COUNT(*) FILTER (WHERE u.email IS NOT NULL) as 有邮箱用户数,
+    COUNT(*) FILTER (WHERE u.created_at >= CURRENT_DATE - INTERVAL '7 days') as 近7天新用户,
+    COUNT(*) FILTER (WHERE u.created_at >= CURRENT_DATE - INTERVAL '30 days') as 近30天新用户,
     COUNT(DISTINCT o.user_id) as 有订单用户数,
     COUNT(DISTINCT c.user_id) as 有购物车用户数
 FROM public.users u
