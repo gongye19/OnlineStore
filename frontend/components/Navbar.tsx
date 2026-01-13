@@ -70,6 +70,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, cartCount,
 
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-4">
+            {/* 购物车按钮 - 非管理后台时显示 */}
             {!isAdminView && (
               <button 
                 onClick={() => setCurrentPage('cart')}
@@ -85,6 +86,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, cartCount,
               </button>
             )}
 
+            {/* 管理后台导航 */}
             {isAdminView && (
                <div className="hidden md:flex items-center gap-4 mr-4 border-r border-white/10 pr-4">
                   <button 
@@ -102,15 +104,16 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, cartCount,
                </div>
             )}
 
+            {/* 登录/退出按钮 */}
             <button 
               onClick={isLoggedIn ? onLogout : () => setCurrentPage('login')}
-              className={`flex items-center gap-2 text-[10px] uppercase tracking-widest px-4 py-2 rounded-sm transition-colors ${isAdminView ? 'bg-white text-art-charcoal hover:bg-art-gold hover:text-white' : 'bg-art-charcoal text-white hover:bg-art-gold'}`}
+              className={`flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest px-4 py-2 rounded-sm transition-colors ${isAdminView ? 'bg-white text-art-charcoal hover:bg-art-gold hover:text-white' : 'bg-art-charcoal text-white hover:bg-art-gold'}`}
               aria-label={isLoggedIn ? '退出登录' : '登录'}
             >
-              <span className="material-symbols-outlined !text-lg" aria-hidden="true">
+              <span className="material-symbols-outlined !text-lg flex-shrink-0" aria-hidden="true">
                 {isLoggedIn ? 'logout' : 'person'}
               </span>
-              <span className="hidden sm:inline">{isLoggedIn ? '退出' : '登录'}</span>
+              <span className="hidden sm:inline whitespace-nowrap">{isLoggedIn ? '退出' : '登录'}</span>
             </button>
           </div>
 
