@@ -65,6 +65,20 @@ router.post('/register', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Failed to create user' });
     }
 
+    // 如果 Supabase 启用了邮箱验证，新用户可能处于未确认状态
+    // 使用 service role key 可以自动确认用户（跳过邮箱验证）
+    // 注意：这需要 Supabase 配置允许 service role 确认用户
+    if (authData.user && !authData.user.email_confirmed_at) {
+      // 尝试自动确认用户（使用 admin API）
+      try {
+        await supabase.auth.admin.updateUserById(authData.user.id, {
+          email_confirm: true
+        });
+      } catch (confirmError) {
+        console.warn('Could not auto-confirm user, email verification may be required:', confirmError);
+      }
+    }
+
     // 创建用户资料记录
     const { error: profileError } = await supabase
       .from('users')
@@ -132,7 +146,20 @@ router.post('/login', async (req: Request, res: Response) => {
     });
 
     if (error) {
-      return res.status(401).json({ error: error.message });
+      console.error('Login error:', error);
+      // 提供更友好的错误信息
+      let errorMessage = error.message;
+      if (error.message.includes('Invalid login credentials')) {
+        errorMessage = '手机号或密码错误';
+      } else if (error.message.includes('Email not confirmed')) {
+        errorMessage = '请先验证邮箱，检查您的邮箱收件箱';
+      } else if (error.message.includes('email')) {
+        errorMessage = '邮箱格式错误或账户不存在';
+      }
+      return res.status(401).json({ 
+        error: errorMessage,
+        code: error.status 
+      });
     }
 
     if (!data.user || !data.session) {
