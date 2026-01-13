@@ -106,8 +106,8 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
       alert('两次输入的密码不一致，请核对。');
       return;
     }
-    if (!regData.phone || !regData.nickname || !regData.province || !regData.city || !regData.detailAddress) {
-      alert('请完善所有必要的会员信息，包括详细地址。');
+    if (!regData.phone || !regData.nickname || !regData.email || !regData.province || !regData.city || !regData.detailAddress) {
+      alert('请完善所有必要的会员信息，包括邮箱和详细地址。');
       return;
     }
 
