@@ -41,12 +41,17 @@ app.use(cors({
     if (expandedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      // 开发环境允许所有来源（仅用于调试）
-      if (process.env.NODE_ENV !== 'production') {
+      // 允许 Vercel 预览域名（所有 *.vercel.app 域名）
+      if (origin.includes('.vercel.app')) {
         callback(null, true);
       } else {
-        console.warn(`CORS blocked origin: ${origin}. Allowed: ${expandedOrigins.join(', ')}`);
-        callback(new Error('Not allowed by CORS'));
+        // 开发环境允许所有来源（仅用于调试）
+        if (process.env.NODE_ENV !== 'production') {
+          callback(null, true);
+        } else {
+          console.warn(`CORS blocked origin: ${origin}. Allowed: ${expandedOrigins.join(', ')}`);
+          callback(new Error('Not allowed by CORS'));
+        }
       }
     }
   },
