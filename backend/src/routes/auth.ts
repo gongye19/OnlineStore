@@ -8,38 +8,35 @@ router.post('/register', async (req: Request, res: Response) => {
   try {
     const { phone, password, nickname, email, address, gender } = req.body;
 
-    // 验证必填字段
-    if (!phone || !password || !nickname) {
-      return res.status(400).json({ error: 'Phone, password, and nickname are required' });
+    // 验证必填字段：邮箱是必填的（用于 Supabase Auth），手机号和昵称也是必填的
+    if (!email || !password || !nickname || !phone) {
+      return res.status(400).json({ error: 'Email, password, nickname, and phone are required' });
     }
 
-    // 使用 Supabase Auth 创建用户（手机号注册）
-    // 注意：Supabase 手机号注册需要配置，如果失败可能需要使用邮箱注册
-    const signUpData: any = {
-      phone,
+    // 使用邮箱注册（Supabase Auth 使用邮箱作为主标识符）
+    // 手机号存储在用户 metadata 中，作为网站登录信息
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
       password,
       options: {
         data: {
+          phone, // 手机号存储在 metadata 中
           nickname,
           address: address || null,
           gender: gender || 'other'
-        }
+        },
+        emailRedirectTo: undefined // 不需要邮箱验证重定向
       }
-    };
-
-    // 如果有邮箱，添加到 metadata
-    if (email) {
-      signUpData.options.data.email = email;
-    }
-
-    const { data: authData, error: authError } = await supabase.auth.signUp(signUpData);
+    });
 
     if (authError) {
       console.error('Supabase signUp error:', authError);
       // 提供更详细的错误信息
       let errorMessage = authError.message;
-      if (authError.message.includes('phone')) {
-        errorMessage = '手机号注册失败，请检查手机号格式或联系管理员';
+      if (authError.message.includes('email')) {
+        errorMessage = '邮箱已被注册或格式不正确';
+      } else if (authError.message.includes('password')) {
+        errorMessage = '密码不符合要求（至少6位）';
       }
       return res.status(400).json({ 
         error: errorMessage,
