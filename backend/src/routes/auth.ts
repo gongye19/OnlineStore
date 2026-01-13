@@ -8,23 +8,31 @@ router.post('/register', async (req: Request, res: Response) => {
   try {
     const { phone, password, nickname, email, address, gender } = req.body;
 
-    if (!phone || !password || !nickname || !email) {
-      return res.status(400).json({ error: 'Phone, password, nickname, and email are required' });
+    // 验证必填字段
+    if (!phone || !password || !nickname) {
+      return res.status(400).json({ error: 'Phone, password, and nickname are required' });
     }
 
-    // 使用 Supabase Auth 创建用户
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    // 使用 Supabase Auth 创建用户（手机号注册）
+    // 注意：Supabase 手机号注册需要配置，如果失败可能需要使用邮箱注册
+    const signUpData: any = {
       phone,
       password,
       options: {
         data: {
           nickname,
-          email,
-          address,
+          address: address || null,
           gender: gender || 'other'
         }
       }
-    });
+    };
+
+    // 如果有邮箱，添加到 metadata
+    if (email) {
+      signUpData.options.data.email = email;
+    }
+
+    const { data: authData, error: authError } = await supabase.auth.signUp(signUpData);
 
     if (authError) {
       return res.status(400).json({ error: authError.message });
