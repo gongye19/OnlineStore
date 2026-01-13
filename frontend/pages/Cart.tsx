@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { Trash2, ShieldCheck } from 'lucide-react';
 import { CartItem, UserProfile } from '../types';
 
 interface CartProps {
@@ -90,7 +91,7 @@ const Cart: React.FC<CartProps> = ({ cart, isLoggedIn, userProfile, onUpdateQuan
                     onClick={() => onRemove(item.id)}
                     className="p-1 hover:text-red-500 transition-colors"
                   >
-                    <span className="material-symbols-outlined text-lg">delete</span>
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
                 
@@ -129,7 +130,7 @@ const Cart: React.FC<CartProps> = ({ cart, isLoggedIn, userProfile, onUpdateQuan
           <div className="space-y-6 pt-4">
             <div className="border border-art-gold/20 bg-art-sand p-4 rounded-sm">
                 <p className="text-[10px] uppercase tracking-widest font-bold text-art-gold mb-3 flex items-center gap-2">
-                    <span className="material-symbols-outlined !text-sm">verified_user</span>
+                    <ShieldCheck className="w-4 h-4" />
                     确认配送信息 (可修改)
                 </p>
                 

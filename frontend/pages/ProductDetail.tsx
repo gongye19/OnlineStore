@@ -1,5 +1,6 @@
 
 import React, { useMemo, useState, useEffect } from 'react';
+import { ArrowLeft, CheckCircle2, ShieldCheck, Leaf, Truck } from 'lucide-react';
 import { Product } from '../types';
 
 interface ProductDetailProps {
@@ -90,7 +91,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, allProducts, onA
         onClick={onBack}
         className="inline-flex items-center gap-2 group mb-8 opacity-40 hover:opacity-100 transition-opacity"
       >
-        <span className="material-symbols-outlined text-base">west</span>
+        <ArrowLeft className="w-4 h-4" />
         <span className="text-[9px] uppercase tracking-[0.3em] font-bold">返回作品廊</span>
       </button>
 
@@ -143,15 +144,15 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, allProducts, onA
             
             <div className="pt-4 border-t border-art-charcoal/5 space-y-3">
               <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-art-charcoal/50 font-medium">
-                <span className="material-symbols-outlined !text-base">verified</span>
+                <ShieldCheck className="w-4 h-4" />
                 <span>伦理手工打造</span>
               </div>
               <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-art-charcoal/50 font-medium">
-                <span className="material-symbols-outlined !text-base">nature_people</span>
+                <Leaf className="w-4 h-4" />
                 <span>回收天然材料</span>
               </div>
               <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-art-charcoal/50 font-medium">
-                <span className="material-symbols-outlined !text-base">local_shipping</span>
+                <Truck className="w-4 h-4" />
                 <span>全国顺丰包邮</span>
               </div>
             </div>
@@ -169,7 +170,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, allProducts, onA
                 }`}
               >
                 <div className={`flex items-center justify-center gap-2 transition-transform duration-300 ${isAdding ? 'scale-110' : 'scale-100'}`}>
-                  {isAdding && <span className="material-symbols-outlined !text-sm">check_circle</span>}
+                  {isAdding && <CheckCircle2 className="w-4 h-4" />}
                   <span>{isAdding ? '已加入收藏' : '加入收藏列表'}</span>
                 </div>
               </button>

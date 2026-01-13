@@ -1,5 +1,6 @@
 
 import React, { useState, useRef } from 'react';
+import { X, Plus, Upload, Trash2, Package } from 'lucide-react';
 import { Product, Category } from '../types';
 import { productsApi, uploadApi } from '../src/lib/api';
 
@@ -98,7 +99,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products, onAddProduct, o
             onClick={() => setIsAdding(!isAdding)}
             className="bg-art-charcoal text-white px-6 py-3 rounded-sm flex items-center gap-2 hover:bg-art-teal transition-all shadow-lg active:scale-95"
           >
-            <span className="material-symbols-outlined">{isAdding ? 'close' : 'add'}</span>
+            {isAdding ? <X className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
             <span className="text-xs uppercase tracking-widest font-bold">{isAdding ? '取消上传' : '上传新商品'}</span>
           </button>
         </header>
@@ -186,7 +187,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products, onAddProduct, o
                       className="hidden"
                     />
                     <div className="space-y-4">
-                      <span className="material-symbols-outlined text-4xl text-gray-300">cloud_upload</span>
+                      <Upload className="w-10 h-10 text-gray-300" />
                       <div className="text-xs text-gray-500 uppercase tracking-widest">
                         点击或拖拽图片至此 <br />
                         <span className="text-[10px] opacity-60">支持多张上传，第一张将作为封面</span>
@@ -210,7 +211,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products, onAddProduct, o
                             onClick={(e) => { e.stopPropagation(); removeImage(idx); }}
                             className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
                           >
-                            <span className="material-symbols-outlined text-white text-xl">delete</span>
+                            <Trash2 className="w-5 h-5 text-white" />
                           </button>
                         </div>
                       ))}
@@ -286,7 +287,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products, onAddProduct, o
                       }}
                       className="text-gray-300 hover:text-red-500 transition-colors p-2"
                     >
-                      <span className="material-symbols-outlined">delete</span>
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   </td>
                 </tr>
@@ -295,7 +296,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products, onAddProduct, o
           </table>
           {products.length === 0 && (
             <div className="py-24 text-center">
-              <span className="material-symbols-outlined text-4xl text-gray-200 block mb-4">inventory_2</span>
+              <Package className="w-10 h-10 text-gray-200 mx-auto mb-4" />
               <p className="text-gray-400 font-serif italic">暂无库存商品，请点击上方按钮添加。</p>
             </div>
           )}

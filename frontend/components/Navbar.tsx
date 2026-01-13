@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { ShoppingBag, LogOut, User, Menu, X } from 'lucide-react';
 import { Page } from '../types';
 
 interface NavbarProps {
@@ -77,7 +78,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, cartCount,
                 className={`relative p-2 hover:opacity-50 transition-all ${shouldAnimateCart ? 'animate-pulse-soft text-art-gold scale-110' : ''}`}
                 aria-label="购物车"
               >
-                <span className="material-symbols-outlined !text-2xl" aria-hidden="true">shopping_bag</span>
+                <ShoppingBag className="w-6 h-6" aria-hidden="true" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-art-gold text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                     {cartCount}
@@ -110,9 +111,11 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, cartCount,
               className={`inline-flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest px-4 py-2 rounded-sm transition-colors ${isAdminView ? 'bg-white text-art-charcoal hover:bg-art-gold hover:text-white' : 'bg-art-charcoal text-white hover:bg-art-gold'}`}
               aria-label={isLoggedIn ? '退出登录' : '登录'}
             >
-              <span className="material-symbols-outlined !text-lg leading-none" aria-hidden="true">
-                {isLoggedIn ? 'logout' : 'person'}
-              </span>
+              {isLoggedIn ? (
+                <LogOut className="w-4 h-4" aria-hidden="true" />
+              ) : (
+                <User className="w-4 h-4" aria-hidden="true" />
+              )}
               <span className="hidden sm:inline whitespace-nowrap leading-none">{isLoggedIn ? '退出' : '登录'}</span>
             </button>
           </div>
@@ -122,7 +125,11 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, cartCount,
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="菜单"
           >
-            <span className="material-symbols-outlined" aria-hidden="true">{isMenuOpen ? 'close' : 'menu'}</span>
+            {isMenuOpen ? (
+              <X className="w-6 h-6" aria-hidden="true" />
+            ) : (
+              <Menu className="w-6 h-6" aria-hidden="true" />
+            )}
           </button>
         </div>
       </div>

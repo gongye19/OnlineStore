@@ -1,5 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product, Category } from '../types';
 
 interface ShopProps {
@@ -129,7 +130,7 @@ const Shop: React.FC<ShopProps> = ({ products, onViewProduct }) => {
             onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
             className="p-2 disabled:opacity-10 hover:text-art-gold transition-colors"
           >
-            <span className="material-symbols-outlined !text-xl">chevron_left</span>
+            <ChevronLeft className="w-5 h-5" />
           </button>
           
           <div className="flex items-center gap-2">
@@ -154,7 +155,7 @@ const Shop: React.FC<ShopProps> = ({ products, onViewProduct }) => {
             onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
             className="p-2 disabled:opacity-10 hover:text-art-gold transition-colors"
           >
-            <span className="material-symbols-outlined !text-xl">chevron_right</span>
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       )}

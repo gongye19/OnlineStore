@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { FileX } from 'lucide-react';
 import { Order, OrderStatus } from '../types';
 
 interface AdminOrdersProps {
@@ -115,7 +116,7 @@ const AdminOrders: React.FC<AdminOrdersProps> = ({ orders, onUpdateStatus }) => 
 
           {orders.length === 0 && (
             <div className="py-32 text-center bg-white rounded-sm border border-dashed border-gray-200">
-               <span className="material-symbols-outlined text-4xl text-gray-200 mb-4 block">assignment_late</span>
+               <FileX className="w-10 h-10 text-gray-200 mx-auto mb-4" />
                <p className="text-gray-400 font-serif italic">暂无活跃订单。</p>
             </div>
           )}
