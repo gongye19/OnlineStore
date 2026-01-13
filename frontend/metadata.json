@@ -1,0 +1,7 @@
+{
+  "name": "Artisan Boutique & Dashboard",
+  "description": "A sophisticated e-commerce platform for artisanal jewelry with a built-in administrative dashboard for product management and order tracking.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
