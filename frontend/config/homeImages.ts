@@ -1,20 +1,27 @@
 // 主页静态图片配置
-// 可以直接修改这里的 URL 来更换图片
-// 或者上传图片到 Supabase Storage 后使用 Storage URL
+// 图片存储在 public/images/home/ 目录下
+// Vite 会自动处理 public 目录下的文件，可以直接通过 /images/home/xxx.jpg 访问
+
+// 支持的图片格式：jpg, jpeg, png, webp
+// 如果图片不存在，会显示加载失败提示
 
 export const homeImages = {
   // Hero 背景图（主页大图）
-  hero: 'https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&q=80&w=2000',
+  // 请将图片文件命名为：hero.jpg 或 hero.png，放在 public/images/home/ 目录下
+  hero: '/images/home/hero.jpg',
   
   // 工艺哲学配图（右侧展示图）
-  philosophy: 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?auto=format&fit=crop&q=80&w=1200',
+  // 请将图片文件命名为：philosophy.jpg 或 philosophy.png，放在 public/images/home/ 目录下
+  philosophy: '/images/home/philosophy.jpg',
   
   // 主理人照片
-  founder: 'https://images.unsplash.com/photo-1581404917879-53e19259fdda?auto=format&fit=crop&q=80&w=800',
+  // 请将图片文件命名为：founder.jpg 或 founder.png，放在 public/images/home/ 目录下
+  founder: '/images/home/founder.jpg',
 };
 
 // 使用说明：
-// 1. 直接修改上面的 URL（使用外部图片链接，如 Unsplash、Imgur 等）
-// 2. 或者上传图片到 Supabase Storage，然后使用 Storage URL：
-//    格式：https://cjbfjtbkxqwvmwxpzipd.supabase.co/storage/v1/object/public/home-images/xxx.jpg
+// 1. 将图片文件放在 frontend/public/images/home/ 目录下
+// 2. 文件名必须为：hero.jpg, philosophy.jpg, founder.jpg（或对应的 .png/.webp 格式）
+// 3. 如果使用不同格式，请修改上面的路径（如 .png 或 .webp）
+// 4. 图片会自动从本地加载，无需外部 URL
 

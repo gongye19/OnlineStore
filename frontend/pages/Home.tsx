@@ -17,8 +17,12 @@ const Home: React.FC<HomeProps> = ({ onShopNow }) => {
             alt="Artisan Jewelry Background" 
             className="w-full h-full object-cover scale-105 brightness-[0.65]"
             onError={(e) => {
-              // 如果图片加载失败，显示占位色
-              (e.target as HTMLImageElement).style.display = 'none';
+              // 如果图片加载失败，尝试其他格式
+              const img = e.target as HTMLImageElement;
+              const src = img.src;
+              if (src.endsWith('.jpg')) {
+                img.src = src.replace('.jpg', '.png');
+              }
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40"></div>
@@ -76,13 +80,20 @@ const Home: React.FC<HomeProps> = ({ onShopNow }) => {
                   className="w-full h-full object-cover animate-fade-in duration-1000"
                   loading="lazy"
                   onError={(e) => {
-                    // 如果图片加载失败，显示错误提示
+                    // 如果图片加载失败，尝试其他格式
                     const img = e.target as HTMLImageElement;
-                    img.style.display = 'none';
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'w-full h-full flex items-center justify-center text-art-charcoal/40 text-sm';
-                    errorDiv.textContent = '图片加载失败';
-                    img.parentElement?.appendChild(errorDiv);
+                    const src = img.src;
+                    // 尝试 .png 格式
+                    if (src.endsWith('.jpg')) {
+                      img.src = src.replace('.jpg', '.png');
+                    } else if (src.endsWith('.png')) {
+                      // 如果 .png 也失败，显示占位
+                      img.style.display = 'none';
+                      const errorDiv = document.createElement('div');
+                      errorDiv.className = 'w-full h-full flex items-center justify-center text-art-charcoal/40 text-sm bg-art-sand';
+                      errorDiv.textContent = '请添加图片：public/images/home/philosophy.jpg';
+                      img.parentElement?.appendChild(errorDiv);
+                    }
                   }}
                 />
               </div>
@@ -102,13 +113,12 @@ const Home: React.FC<HomeProps> = ({ onShopNow }) => {
                   alt="Founder Ms. Yao" 
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    // 如果图片加载失败，显示占位色
+                    // 如果图片加载失败，尝试其他格式
                     const img = e.target as HTMLImageElement;
-                    img.style.display = 'none';
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'w-full h-full bg-art-sand flex items-center justify-center text-art-charcoal/40 text-xs';
-                    errorDiv.textContent = '图片加载失败';
-                    img.parentElement?.appendChild(errorDiv);
+                    const src = img.src;
+                    if (src.endsWith('.jpg')) {
+                      img.src = src.replace('.jpg', '.png');
+                    }
                   }}
                 />
               </div>
