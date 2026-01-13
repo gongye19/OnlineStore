@@ -50,6 +50,9 @@ const CHINA_REGIONS: Record<string, string[]> = {
 const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPage }) => {
   const isRegisterMode = currentPage === 'register';
   
+  // Toast 通知状态
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' | 'warning' } | null>(null);
+  
   // 登录状态
   const [loginPhone, setLoginPhone] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -74,7 +77,7 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginPhone || !loginPassword) {
-      alert('请输入注册时填写的手机号与密码。');
+      setToast({ message: '请输入注册时填写的手机号与密码。', type: 'warning' });
       return;
     }
     
@@ -91,23 +94,23 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
       
       onLogin(true, user.is_admin || false, profile);
       if (user.is_admin) {
-        alert('管理员身份认证成功，欢迎进入管理后台。');
+        setToast({ message: '管理员身份认证成功，欢迎进入管理后台。', type: 'success' });
       } else {
-        alert('登录成功，欢迎回到 Artisan 工作室。');
+        setToast({ message: '登录成功，欢迎回到 Artisan 工作室。', type: 'success' });
       }
     } catch (error: any) {
-      alert(error.message || '登录失败，请检查手机号和密码。');
+      setToast({ message: error.message || '登录失败，请检查手机号和密码。', type: 'error' });
     }
   };
 
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (regData.password !== regData.confirmPassword) {
-      alert('两次输入的密码不一致，请核对。');
+      setToast({ message: '两次输入的密码不一致，请核对。', type: 'error' });
       return;
     }
     if (!regData.phone || !regData.nickname || !regData.email || !regData.province || !regData.city || !regData.detailAddress) {
-      alert('请完善所有必要的会员信息，包括邮箱和详细地址。');
+      setToast({ message: '请完善所有必要的会员信息，包括邮箱和详细地址。', type: 'warning' });
       return;
     }
 
@@ -132,16 +135,28 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
         gender: user.gender as 'male' | 'female' | 'other'
       };
 
-      alert('注册成功！正在为您自动进入 Artisan 工作室...');
-      onLogin(true, false, profile);
+      setToast({ message: '注册成功！正在为您自动进入 Artisan 工作室...', type: 'success' });
+      // 延迟一下再跳转，让用户看到成功提示
+      setTimeout(() => {
+        onLogin(true, false, profile);
+      }, 1500);
     } catch (error: any) {
-      alert(error.message || '注册失败，请检查输入信息。');
+      setToast({ message: error.message || '注册失败，请检查输入信息。', type: 'error' });
     }
   };
 
   return (
-    <div className="max-w-[520px] mx-auto px-6 py-16 animate-fade-in">
-      <div className="text-center mb-12">
+    <>
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          duration={toast.type === 'success' ? 2000 : 4000}
+          onClose={() => setToast(null)}
+        />
+      )}
+      <div className="max-w-[520px] mx-auto px-6 py-16 animate-fade-in">
+        <div className="text-center mb-12">
         <h1 className="font-serif text-4xl font-light mb-4 tracking-tight">
           {isRegisterMode ? '创建会员账户' : '会员登录'}
         </h1>
