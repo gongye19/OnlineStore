@@ -159,7 +159,6 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
               value={loginPhone}
               onChange={(e) => setLoginPhone(e.target.value)}
               className="w-full border-x-0 border-t-0 border-b border-art-charcoal/20 focus:ring-0 focus:border-art-gold bg-transparent py-3 text-sm font-light"
-              placeholder="138 **** ****"
             />
           </div>
 
@@ -170,7 +169,6 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
               value={loginPassword}
               onChange={(e) => setLoginPassword(e.target.value)}
               className="w-full border-x-0 border-t-0 border-b border-art-charcoal/20 focus:ring-0 focus:border-art-gold bg-transparent py-3 text-sm font-light"
-              placeholder="••••••••"
             />
           </div>
 
@@ -182,7 +180,6 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
           </button>
 
           <div className="text-center space-y-4 pt-4">
-            <p className="text-[8px] opacity-30 italic">提示：管理员账户 13800138000 / admin123</p>
             <div className="h-[1px] bg-art-charcoal/5 w-12 mx-auto"></div>
             <div className="flex flex-col gap-2">
               <button 
