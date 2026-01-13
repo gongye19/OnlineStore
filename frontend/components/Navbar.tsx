@@ -74,8 +74,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, cartCount,
               <button 
                 onClick={() => setCurrentPage('cart')}
                 className={`relative p-2 hover:opacity-50 transition-all ${shouldAnimateCart ? 'animate-pulse-soft text-art-gold scale-110' : ''}`}
+                aria-label="购物车"
               >
-                <span className="material-symbols-outlined !text-2xl">shopping_bag</span>
+                <span className="material-symbols-outlined !text-2xl" aria-hidden="true">shopping_bag</span>
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-art-gold text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                     {cartCount}
@@ -104,8 +105,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, cartCount,
             <button 
               onClick={isLoggedIn ? onLogout : () => setCurrentPage('login')}
               className={`flex items-center gap-2 text-[10px] uppercase tracking-widest px-4 py-2 rounded-sm transition-colors ${isAdminView ? 'bg-white text-art-charcoal hover:bg-art-gold hover:text-white' : 'bg-art-charcoal text-white hover:bg-art-gold'}`}
+              aria-label={isLoggedIn ? '退出登录' : '登录'}
             >
-              <span className="material-symbols-outlined !text-lg">
+              <span className="material-symbols-outlined !text-lg" aria-hidden="true">
                 {isLoggedIn ? 'logout' : 'person'}
               </span>
               <span className="hidden sm:inline">{isLoggedIn ? '退出' : '登录'}</span>
@@ -115,8 +117,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, cartCount,
           <button 
             className="md:hidden p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="菜单"
           >
-            <span className="material-symbols-outlined">{isMenuOpen ? 'close' : 'menu'}</span>
+            <span className="material-symbols-outlined" aria-hidden="true">{isMenuOpen ? 'close' : 'menu'}</span>
           </button>
         </div>
       </div>
