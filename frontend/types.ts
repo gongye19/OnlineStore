@@ -38,4 +38,4 @@ export interface UserProfile {
   gender: 'male' | 'female' | 'other';
 }
 
-export type Page = 'home' | 'shop' | 'cart' | 'detail' | 'admin-products' | 'admin-orders' | 'my-orders' | 'login' | 'register';
+export type Page = 'home' | 'shop' | 'cart' | 'detail' | 'admin-products' | 'admin-orders' | 'my-orders' | 'login' | 'register' | 'change-password';

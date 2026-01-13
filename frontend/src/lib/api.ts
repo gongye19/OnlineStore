@@ -85,6 +85,27 @@ export const authApi = {
   getMe: async () => {
     return apiRequest<UserProfile & { id: string; is_admin: boolean }>('/api/auth/me');
   },
+
+  sendEmailOTP: async (email: string) => {
+    return apiRequest<{ message: string }>('/api/auth/send-email-otp', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  verifyEmailOTP: async (email: string, token: string) => {
+    return apiRequest<{ message: string; verified: boolean; user_id: string }>('/api/auth/verify-email-otp', {
+      method: 'POST',
+      body: JSON.stringify({ email, token }),
+    });
+  },
+
+  changePassword: async (email: string, token: string, newPassword: string) => {
+    return apiRequest<{ message: string }>('/api/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ email, token, newPassword }),
+    });
+  },
 };
 
 // 商品 API

@@ -161,13 +161,22 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
           <div className="text-center space-y-4 pt-4">
             <p className="text-[8px] opacity-30 italic">提示：管理员账户 13800138000 / admin123</p>
             <div className="h-[1px] bg-art-charcoal/5 w-12 mx-auto"></div>
-            <button 
-              type="button" 
-              onClick={onNavigateToRegister}
-              className="text-[10px] uppercase tracking-widest text-art-gold font-bold hover:opacity-70 transition-opacity"
-            >
-              创建新账户 | CREATE NEW ACCOUNT
-            </button>
+            <div className="flex flex-col gap-2">
+              <button 
+                type="button" 
+                onClick={onNavigateToRegister}
+                className="text-[10px] uppercase tracking-widest text-art-gold font-bold hover:opacity-70 transition-opacity"
+              >
+                创建新账户 | CREATE NEW ACCOUNT
+              </button>
+              <button 
+                type="button" 
+                onClick={() => window.location.hash = '#change-password'}
+                className="text-[10px] uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity"
+              >
+                忘记密码？修改密码
+              </button>
+            </div>
           </div>
         </form>
       ) : (

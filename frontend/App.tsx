@@ -11,6 +11,7 @@ import AdminProducts from './pages/AdminProducts';
 import AdminOrders from './pages/AdminOrders';
 import MyOrders from './pages/MyOrders';
 import Login from './pages/Login';
+import ChangePassword from './pages/ChangePassword';
 import { productsApi, cartApi, ordersApi, authApi, clearAuthToken } from './src/lib/api';
 
 const App: React.FC = () => {
@@ -227,6 +228,8 @@ const App: React.FC = () => {
           onNavigateToRegister={() => setCurrentPage('register')}
           currentPage={currentPage}
         />;
+      case 'change-password':
+        return <ChangePassword />;
       case 'admin-products':
         return <AdminProducts 
           products={products} 
