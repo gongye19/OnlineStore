@@ -67,15 +67,20 @@ router.post('/register', async (req: Request, res: Response) => {
 
     // 如果 Supabase 启用了邮箱验证，新用户可能处于未确认状态
     // 使用 service role key 可以自动确认用户（跳过邮箱验证）
-    // 注意：这需要 Supabase 配置允许 service role 确认用户
     if (authData.user && !authData.user.email_confirmed_at) {
-      // 尝试自动确认用户（使用 admin API）
       try {
-        await supabase.auth.admin.updateUserById(authData.user.id, {
-          email_confirm: true
-        });
-      } catch (confirmError) {
-        console.warn('Could not auto-confirm user, email verification may be required:', confirmError);
+        // 使用 admin API 自动确认用户邮箱
+        const { error: confirmError } = await supabase.auth.admin.updateUserById(
+          authData.user.id,
+          { email_confirm: true }
+        );
+        if (confirmError) {
+          console.warn('Could not auto-confirm user:', confirmError);
+        } else {
+          console.log('User email auto-confirmed');
+        }
+      } catch (confirmError: any) {
+        console.warn('Error auto-confirming user:', confirmError);
       }
     }
 
