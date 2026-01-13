@@ -66,15 +66,14 @@ router.get('/:id', authenticate, async (req: AuthRequest, res: Response) => {
           products (*)
         )
       `)
-      .eq('id', id)
-      .single();
+      .eq('id', id);
 
     // 如果不是管理员，只能查看自己的订单
     if (!req.isAdmin) {
       query = query.eq('user_id', req.userId!);
     }
 
-    const { data, error } = await query;
+    const { data, error } = await query.single();
 
     if (error || !data) {
       return res.status(404).json({ error: 'Order not found' });
