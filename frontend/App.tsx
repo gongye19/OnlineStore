@@ -35,7 +35,7 @@ const App: React.FC = () => {
           // 验证 token 并获取用户信息
           try {
             const user = await authApi.getMe();
-            setIsLoggedIn(true);
+      setIsLoggedIn(true);
             setIsAdmin(user.is_admin || false);
             setUserProfile({
               phone: user.phone,
@@ -132,7 +132,7 @@ const App: React.FC = () => {
     const item = cart.find(i => i.id === productId);
     if (!item) return;
     
-    const newQty = Math.max(1, item.quantity + delta);
+        const newQty = Math.max(1, item.quantity + delta);
     try {
       await cartApi.update(productId, newQty);
       await loadCart();
@@ -150,10 +150,10 @@ const App: React.FC = () => {
   const handleCheckout = async (orderData: { customerName: string; shippingPhone: string; shippingAddress: string }) => {
     try {
       const newOrder = await ordersApi.create(orderData);
-      setOrders(prev => [newOrder, ...prev]);
+    setOrders(prev => [newOrder, ...prev]);
       await loadCart(); // 购物车会被后端清空
-      setCurrentPage('my-orders');
-      alert('订单已成功提交！');
+    setCurrentPage('my-orders');
+    alert('订单已成功提交！');
     } catch (error: any) {
       alert(error.message || '提交订单失败');
     }
@@ -163,7 +163,7 @@ const App: React.FC = () => {
     if (success && profile) {
       setIsLoggedIn(true);
       setIsAdmin(asAdmin);
-      setUserProfile(profile);
+        setUserProfile(profile);
       // 登录后加载购物车和订单
       await loadCart();
       await loadOrders();

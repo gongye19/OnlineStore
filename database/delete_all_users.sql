@@ -29,28 +29,33 @@ FROM public.users;
 -- 5. 删除所有用户（这会自动级联删除购物车、订单等）
 DELETE FROM public.users;
 
--- 6. 查看删除后的结果（应该返回 0）
+-- 6. 删除 Supabase Auth 中的所有用户（auth.users）
+-- ⚠️ 注意：这需要超级管理员权限，在某些 Supabase 实例中可能无法直接执行
+-- 如果执行失败，请通过 Dashboard 手动删除：Authentication → Users
+DELETE FROM auth.users;
+
+-- 7. 查看删除后的结果（应该返回 0）
 SELECT 
     COUNT(*) as total_users_after_deletion
 FROM public.users;
 
+-- 8. 查看 auth.users 删除后的结果（应该返回 0）
+SELECT 
+    COUNT(*) as total_auth_users_after_deletion
+FROM auth.users;
+
 -- ============================================
 -- ⚠️ 重要提示：
 -- ============================================
--- 上面的脚本只删除了 public.users 表中的数据
+-- 如果步骤 6 删除 auth.users 失败（权限不足），请使用以下方法：
 -- 
--- Supabase Auth 中的用户（auth.users）需要单独删除：
--- 
--- 方法 1：通过 Supabase Dashboard
+-- 方法 1：通过 Supabase Dashboard（推荐）
 -- 1. 进入 Supabase Dashboard
 -- 2. 点击左侧菜单 "Authentication" → "Users"
 -- 3. 选择所有用户并删除
 -- 
--- 方法 2：通过 SQL（需要超级管理员权限）
--- 注意：直接删除 auth.users 可能会失败，建议使用 Dashboard 或 Admin API
--- 
--- 方法 3：通过后端 API（推荐用于批量删除）
--- 使用 Supabase Admin API 的 deleteUser 方法
+-- 方法 2：通过后端 API
+-- 使用 Supabase Admin API 的 deleteUser 方法批量删除
 -- 
 -- ============================================
 -- 验证删除结果

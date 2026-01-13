@@ -64,23 +64,23 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products, onAddProduct, o
 
     try {
       await productsApi.create({
-        name: newProduct.name || '未命名作品',
-        price: Number(newProduct.price) || 0,
-        category: (newProduct.category as Category) || 'Necklaces',
-        description: newProduct.description || '',
+      name: newProduct.name || '未命名作品',
+      price: Number(newProduct.price) || 0,
+      category: (newProduct.category as Category) || 'Necklaces',
+      description: newProduct.description || '',
         image_url: uploadedImages[0],
         images: uploadedImages,
-        stock: Number(newProduct.stock) || 0,
-        featured: false
+      stock: Number(newProduct.stock) || 0,
+      featured: false
       });
 
       onAddProduct({} as Product); // 触发刷新
-      setIsAdding(false);
-      setUploadedImages([]);
-      setNewProduct({
+    setIsAdding(false);
+    setUploadedImages([]);
+    setNewProduct({
         name: '', price: 0, category: 'Necklaces', description: '',
         stock: 10
-      });
+    });
       alert('商品创建成功！');
     } catch (error: any) {
       alert(error.message || '创建商品失败');

@@ -54,6 +54,9 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
   // Toast 通知状态
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' | 'warning' } | null>(null);
   
+  // 加载状态
+  const [isLoading, setIsLoading] = useState(false);
+  
   // 登录状态
   const [loginPhone, setLoginPhone] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -82,6 +85,7 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
       return;
     }
     
+    setIsLoading(true);
     try {
       const response = await authApi.login(loginPhone, loginPassword);
       const user = response.user;
@@ -92,15 +96,17 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
         address: user.address || '',
         gender: user.gender as 'male' | 'female' | 'other'
       };
-      
+    
       onLogin(true, user.is_admin || false, profile);
       if (user.is_admin) {
         setToast({ message: '管理员身份认证成功，欢迎进入管理后台。', type: 'success' });
-      } else {
+    } else {
         setToast({ message: '登录成功，欢迎回到 Artisan 工作室。', type: 'success' });
       }
     } catch (error: any) {
       setToast({ message: error.message || '登录失败，请检查手机号和密码。', type: 'error' });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -115,14 +121,15 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
       return;
     }
 
+    setIsLoading(true);
     try {
       await authApi.register({
-        phone: regData.phone,
+      phone: regData.phone,
         password: regData.password,
-        nickname: regData.nickname,
-        email: regData.email,
-        address: `${regData.province}${regData.city}${regData.detailAddress}`,
-        gender: regData.gender
+      nickname: regData.nickname,
+      email: regData.email,
+      address: `${regData.province}${regData.city}${regData.detailAddress}`,
+      gender: regData.gender
       });
 
       // 注册成功后自动登录
@@ -139,10 +146,11 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
       setToast({ message: '注册成功！正在为您自动进入 Artisan 工作室...', type: 'success' });
       // 延迟一下再跳转，让用户看到成功提示
       setTimeout(() => {
-        onLogin(true, false, profile);
+    onLogin(true, false, profile);
       }, 1500);
     } catch (error: any) {
       setToast({ message: error.message || '注册失败，请检查输入信息。', type: 'error' });
+      setIsLoading(false);
     }
   };
 
@@ -156,8 +164,8 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
           onClose={() => setToast(null)}
         />
       )}
-      <div className="max-w-[520px] mx-auto px-6 py-16 animate-fade-in">
-        <div className="text-center mb-12">
+    <div className="max-w-[520px] mx-auto px-6 py-16 animate-fade-in">
+      <div className="text-center mb-12">
         <h1 className="font-serif text-4xl font-light mb-4 tracking-tight">
           {isRegisterMode ? '创建会员账户' : '会员登录'}
         </h1>
@@ -198,13 +206,13 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
           <div className="text-center space-y-4 pt-4">
             <div className="h-[1px] bg-art-charcoal/5 w-12 mx-auto"></div>
             <div className="flex flex-col gap-2">
-              <button 
-                type="button" 
-                onClick={onNavigateToRegister}
-                className="text-[10px] uppercase tracking-widest text-art-gold font-bold hover:opacity-70 transition-opacity"
-              >
-                创建新账户 | CREATE NEW ACCOUNT
-              </button>
+            <button 
+              type="button" 
+              onClick={onNavigateToRegister}
+              className="text-[10px] uppercase tracking-widest text-art-gold font-bold hover:opacity-70 transition-opacity"
+            >
+              创建新账户 | CREATE NEW ACCOUNT
+            </button>
               <button 
                 type="button" 
                 onClick={() => window.location.hash = '#change-password'}
@@ -303,9 +311,20 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
 
           <button 
             type="submit"
-            className="w-full py-5 bg-art-charcoal text-white text-[11px] uppercase tracking-[0.4em] font-bold hover:bg-art-gold transition-all shadow-xl active:scale-[0.98]"
+            disabled={isLoading}
+            className="w-full py-5 bg-art-charcoal text-white text-[11px] uppercase tracking-[0.4em] font-bold hover:bg-art-gold transition-all shadow-xl active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            创建会员账户 | JOIN NOW
+            {isLoading ? (
+              <>
+                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>创建中...</span>
+              </>
+            ) : (
+              '创建会员账户 | JOIN NOW'
+            )}
           </button>
 
           <div className="text-center pt-4">
@@ -319,7 +338,7 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
           </div>
         </form>
       )}
-      </div>
+    </div>
     </>
   );
 };
