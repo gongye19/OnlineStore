@@ -247,7 +247,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products, onAddProduct, o
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-sm overflow-hidden border border-gray-100">
-                        <img src={p.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                        <img src={p.image} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500" />
                       </div>
                       <div>
                         <span className="font-serif text-lg font-medium block">{p.name}</span>
