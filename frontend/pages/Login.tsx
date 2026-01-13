@@ -2,6 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Page, UserProfile } from '../types';
 import { authApi } from '../src/lib/api';
+import Toast from '../components/Toast';
 
 interface LoginProps {
   onLogin: (success: boolean, asAdmin: boolean, profile?: UserProfile) => void;
