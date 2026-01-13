@@ -146,7 +146,8 @@ const Login: React.FC<LoginProps> = ({ onLogin, onNavigateToRegister, currentPag
       setToast({ message: '注册成功！正在为您自动进入 Artisan 工作室...', type: 'success' });
       // 延迟一下再跳转，让用户看到成功提示
       setTimeout(() => {
-    onLogin(true, false, profile);
+        setIsLoading(false);
+        onLogin(true, false, profile);
       }, 1500);
     } catch (error: any) {
       setToast({ message: error.message || '注册失败，请检查输入信息。', type: 'error' });
