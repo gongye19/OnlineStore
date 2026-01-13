@@ -68,21 +68,6 @@
       direction: ltr;
       -webkit-font-feature-settings: 'liga';
       -webkit-font-smoothing: antialiased;
-      /* 使用 font-display: swap 确保字体快速显示 */
-      font-display: swap;
-    }
-    
-    /* 防止显示文本：使用零宽空格和颜色透明 */
-    .material-symbols-outlined {
-      color: transparent;
-      text-shadow: 0 0 0 currentColor;
-    }
-    
-    /* 字体加载后恢复正常颜色 */
-    @supports (font-variation-settings: normal) {
-      .material-symbols-outlined {
-        color: inherit;
-      }
     }
     body {
       background-color: #FAF9F6;
