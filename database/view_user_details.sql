@@ -4,6 +4,43 @@
 -- ============================================
 
 -- ============================================
+-- 0. 每个用户的完整详细信息（推荐使用）
+-- ============================================
+SELECT 
+    '========== 用户信息 ==========' as 分隔符,
+    u.id as 用户ID,
+    u.phone as 手机号,
+    u.nickname as 昵称,
+    u.email as 邮箱,
+    u.address as 地址,
+    CASE 
+        WHEN u.gender = 'male' THEN '男'
+        WHEN u.gender = 'female' THEN '女'
+        ELSE '保密'
+    END as 性别,
+    CASE 
+        WHEN u.is_admin = true THEN '是'
+        ELSE '否'
+    END as 管理员,
+    u.created_at as 注册时间,
+    u.updated_at as 最后更新时间,
+    -- 订单统计
+    COUNT(DISTINCT o.id) as 订单总数,
+    COALESCE(SUM(o.total), 0) as 总消费金额,
+    COALESCE(AVG(o.total), 0) as 平均订单金额,
+    -- 购物车统计
+    COUNT(DISTINCT c.product_id) as 购物车商品种类数,
+    COALESCE(SUM(c.quantity), 0) as 购物车商品总数,
+    -- 最近活动
+    MAX(o.created_at) as 最近订单时间,
+    MAX(c.updated_at) as 最近购物车更新时间
+FROM public.users u
+LEFT JOIN public.orders o ON o.user_id = u.id
+LEFT JOIN public.cart_items c ON c.user_id = u.id
+GROUP BY u.id, u.phone, u.nickname, u.email, u.address, u.gender, u.is_admin, u.created_at, u.updated_at
+ORDER BY u.created_at DESC;
+
+-- ============================================
 -- 1. 用户基本信息概览
 -- ============================================
 SELECT 
