@@ -9,9 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" as="style">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" onload="document.body.classList.add('fonts-loaded')" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"></noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
   <script>
     tailwind.config = {
       theme: {
@@ -70,17 +68,21 @@
       direction: ltr;
       -webkit-font-feature-settings: 'liga';
       -webkit-font-smoothing: antialiased;
+      /* 使用 font-display: swap 确保字体快速显示 */
+      font-display: swap;
     }
     
-    /* 字体加载前隐藏文本，使用 opacity 而不是 text-indent */
+    /* 防止显示文本：使用零宽空格和颜色透明 */
     .material-symbols-outlined {
-      opacity: 0;
-      transition: opacity 0.2s;
+      color: transparent;
+      text-shadow: 0 0 0 currentColor;
     }
     
-    /* 字体加载完成后显示 */
-    body.fonts-loaded .material-symbols-outlined {
-      opacity: 1;
+    /* 字体加载后恢复正常颜色 */
+    @supports (font-variation-settings: normal) {
+      .material-symbols-outlined {
+        color: inherit;
+      }
     }
     body {
       background-color: #FAF9F6;
@@ -115,19 +117,6 @@
 </head>
 <body>
   <div id="root"></div>
-  <script>
-    // 确保字体加载后显示图标
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(function() {
-        document.body.classList.add('fonts-loaded');
-      });
-    } else {
-      // 降级方案：延迟显示
-      setTimeout(function() {
-        document.body.classList.add('fonts-loaded');
-      }, 100);
-    }
-  </script>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>
